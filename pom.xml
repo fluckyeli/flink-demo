@@ -71,13 +71,15 @@
             <artifactId>flink-connector-files</artifactId>
             <version>${flink.version}</version>
         </dependency>
-        <!-- Source: https://mvnrepository.com/artifact/org.apache.flink/flink-connector-kafka -->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka</artifactId>
-            <version>3.4.0-1.20</version>
-            <scope>compile</scope>
-        </dependency>
+
+        <!-- 注意：此处会导致冲突！ -->
+        <!-- Mysql CDC source 静默卡死。-->
+        <!--                <dependency>-->
+        <!--                    <groupId>org.apache.flink</groupId>-->
+        <!--                    <artifactId>flink-connector-kafka</artifactId>-->
+        <!--                    <version>3.4.0-1.20</version>-->
+        <!--                </dependency>-->
+
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-datagen</artifactId>
@@ -134,7 +136,7 @@
 
     <build>
         <plugins>
-            <!-- Java 17 插件 -->
+            <!-- Java 版本 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -158,11 +160,6 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-<!--                            <transformers>-->
-<!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-<!--                                    <mainClass>com.fly.flinkcdc.MysqlSourceDemo</mainClass>-->
-<!--                                </transformer>-->
-<!--                            </transformers>-->
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>

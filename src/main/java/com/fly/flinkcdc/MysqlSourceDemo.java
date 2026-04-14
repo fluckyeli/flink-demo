@@ -25,7 +25,7 @@ public class MysqlSourceDemo {
         // 3. 添加 source
         MySqlSource<String> source = MySqlSource.<String>builder()
                 .hostname("host.docker.internal")
-                .port(13306)
+                .port(3306)
                 .username("zxhacker")
                 .password("18813015780")
                 .databaseList("demo1")
