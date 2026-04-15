@@ -19,6 +19,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <flink.version>1.20.3</flink.version>
         <flink.cdc.version>3.6.0-1.20</flink.cdc.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
@@ -72,19 +73,11 @@
             <version>${flink.version}</version>
         </dependency>
 
-        <!-- 注意：此处会导致冲突！ -->
-        <!-- Mysql CDC source 静默卡死。-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.flink</groupId>-->
-        <!--            <artifactId>flink-connector-kafka</artifactId>-->
-        <!--            <version>3.4.0-1.20</version>-->
-        <!--            <exclusions>-->
-        <!--                <exclusion>-->
-        <!--                    <artifactId>kafka-clients</artifactId>-->
-        <!--                    <groupId>org.apache.kafka</groupId>-->
-        <!--                </exclusion>-->
-        <!--            </exclusions>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka</artifactId>
+            <version>3.4.0-1.20</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -132,11 +125,13 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.25.4</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.21.2</version>
-        </dependency>
+        <!-- 注意：此处 <jackson-databind> + <flink-connector-kafka> 会导致冲突！ -->
+        <!-- Mysql CDC source 的json 解析 JsonDebeziumDeserializationSchema 静默卡死。-->
+        <!-- <dependency>-->
+        <!--     <groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--     <artifactId>jackson-databind</artifactId>-->
+        <!--     <version>2.21.2</version>-->
+        <!-- </dependency>-->
     </dependencies>
 
 
