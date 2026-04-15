@@ -26,105 +26,115 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-runtime-web</artifactId>
-            <version>${flink.version}</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--基础 API 层（批处理环境）：批处理（Batch）API，即 ExecutionEnvironment-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-java</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
+
+        <!--流处理核心引擎（DataStream API）：流处理（Streaming）API，即 StreamExecutionEnvironment-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-java</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
+
+        <!--提交客户端（Client）：在 IDE 中本地运行 Flink 程序（必须）。
+        虽然没有显式调用 flink-clients，但 StreamExecutionEnvironment.execute() 内部会使用它来启动本地执行环境。-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-clients</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
+
+        <!--日志-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.25.4</version>
+            <scope>${flink.scope}</scope>
+        </dependency>
+
+        <!--web ui-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-table-planner_2.12</artifactId>
+            <artifactId>flink-runtime-web</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-table-runtime</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
+
+        <!--连接 Table API/SQL 和 DataStream API 的桥梁
+        流与表的相互转换，本地 IDE 开发与调试（必须显式添加）-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-java-bridge</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
+        <!--所有 Table API/SQL 作业的运行基础（必需）
+        Flink Table API 和 SQL 的核心计划器（Planner）模块。
+        它负责将开发者编写的 SQL 或 Table API 代码，翻译、优化并最终转换成 Flink 运行时可以执行的物理任务。
+        本地 IDE 开发与调试（必须显式添加）-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-base</artifactId>
+            <artifactId>flink-table-planner-loader</artifactId>
             <version>${flink.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
+
+        <!--Flink Table API 和 SQL 的核心运行时引擎。
+        简单来说，它负责把你写的 SQL 或 Table API 代码真正“跑”起来。-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-files</artifactId>
+            <artifactId>flink-table-runtime</artifactId>
             <version>${flink.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka</artifactId>
-            <version>3.4.0-1.20</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-datagen</artifactId>
-            <version>2.2.0</version>
-            <scope>compile</scope>
+            <scope>${flink.scope}</scope>
         </dependency>
 
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-jdbc</artifactId>
-            <version>3.3.0-1.20</version>
-        </dependency>
+        <!--下面是connector
+        通常使用默认的 compile 或不写 scope 确保依赖被打进最终的作业 JAR 包中。
+        因为 Flink 集群的 lib 目录下默认不包含这些连接器-->
 
-
+        <!--监听并捕获 MySQL 等数据库的实时变更（增、删、改）-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-mysql-cdc</artifactId>
             <version>${flink.cdc.version}</version>
         </dependency>
 
-        <!-- Flink CDC 核心依赖 -->
+        <!--文件读取、写入-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-cdc-cli</artifactId>
-            <version>${flink.cdc.version}</version>
+            <artifactId>flink-connector-files</artifactId>
+            <version>${flink.version}</version>
         </dependency>
 
-        <!-- MySQL CDC 连接器 (Pipeline 模式) -->
+        <!--kafka connector-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-cdc-pipeline-connector-mysql</artifactId>
-            <version>${flink.cdc.version}</version>
+            <artifactId>flink-connector-kafka</artifactId>
+            <version>3.4.0-1.20</version>
         </dependency>
 
+        <!--以jdbc方式读取、写入数据库-->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.31</version>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc</artifactId>
+            <version>3.3.0-1.20</version>
         </dependency>
 
+        <!--开发测试用的数据生成器-->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.25.4</version>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-datagen</artifactId>
+            <version>1.20.3</version>
         </dependency>
+
         <!-- 注意：此处 <jackson-databind> + <flink-connector-kafka> 会导致冲突！ -->
         <!-- Mysql CDC source 的json 解析 JsonDebeziumDeserializationSchema 静默卡死。-->
         <!-- <dependency>-->
@@ -134,6 +144,23 @@
         <!-- </dependency>-->
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <flink.scope>compile</flink.scope>
+            </properties>
+        </profile>
+        <profile>
+            <id>cluster</id>
+            <properties>
+                <flink.scope>provided</flink.scope>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -177,4 +204,6 @@
             </plugin>
         </plugins>
     </build>
+
+
 </project>

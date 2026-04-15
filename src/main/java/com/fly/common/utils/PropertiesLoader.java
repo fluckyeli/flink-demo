@@ -16,6 +16,13 @@ public class PropertiesLoader {
 
     private static final Logger logger = Logger.getLogger(PropertiesLoader.class.getName());
 
+    /**
+     * 设置 logger 日志时间格式
+     */
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format",
+                "[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] %4$s: %5$s%6$s%n");
+    }
     // 单例实例
     private static PropertiesLoader instance;
 
